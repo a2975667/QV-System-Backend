@@ -7,7 +7,8 @@ import { UpdateSurveyDto } from './dtos/updateSurvey.dto';
 import { SurveysService } from './surveys.service';
 import { Roles } from 'src/auth/roles/roles.decorator';
 import { Role } from 'src/auth/roles/role.enum';
-
+import { ApiBearerAuth } from '@nestjs/swagger';
+@ApiBearerAuth()
 @Controller('surveys')
 export class SurveysController {
   constructor(private surveyService: SurveysService) {}

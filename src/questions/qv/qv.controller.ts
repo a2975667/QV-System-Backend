@@ -9,13 +9,13 @@ import { Role } from 'src/auth/roles/role.enum';
 import { Roles } from 'src/auth/roles/roles.decorator';
 import { RolesGuard } from 'src/auth/roles/roles.guard';
 import { UpdateQVSettingsDto } from '../dtos/updateQVSettings.dto';
-@Controller('questions')
+@Controller('questions/qv')
 export class QvController {
   constructor(private qvService: QvService) {}
 
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.Admin, Role.Designer)
-  @Post('create-qv')
+  @Post('')
   createQVQuestion(
     @Request() req,
     @Body() createQVQuestionDto: CreateUpdateQVQuestionDto,
@@ -26,7 +26,7 @@ export class QvController {
 
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.Admin, Role.Designer)
-  @Put('update-qv/:id')
+  @Put(':id')
   updateQVQuestion(
     @Request() req,
     @Param('id') questionId: string,
@@ -42,7 +42,7 @@ export class QvController {
 
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.Admin, Role.Designer)
-  @Put('update-qvOptions/:id')
+  @Put(':id/option')
   updateQVOptions(
     @Request() req,
     @Param('id') questionId: string,
@@ -58,7 +58,7 @@ export class QvController {
 
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.Admin, Role.Designer)
-  @Put('update-qvSetting/:id')
+  @Put(':id/settings')
   updateQVSettings(
     @Request() req,
     @Param('id') questionId: string,

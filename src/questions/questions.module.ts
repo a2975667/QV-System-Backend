@@ -25,7 +25,7 @@ import { Survey, SurveySchema } from 'src/schemas/survey.schema';
     UsersModule,
     SurveysModule,
   ],
-  controllers: [QuestionsController, QvController],
+  controllers: [QvController, QuestionsController],
   providers: [UsersService, QuestionsService, QvService, SurveysService],
   exports: [],
 })

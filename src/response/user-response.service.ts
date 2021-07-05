@@ -418,7 +418,7 @@ export class UserResponseService {
     const updateQuestion = await this.questionModel.findByIdAndUpdate(
       thisQuestionId,
       {
-        $push: { responses: questionResponseId },
+        $push: { responses: String(questionResponseId) },
       },
       { returnOriginal: false },
     );

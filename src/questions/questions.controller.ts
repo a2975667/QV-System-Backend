@@ -8,14 +8,16 @@ import { Roles } from 'src/auth/roles/roles.decorator';
 import { RolesGuard } from 'src/auth/roles/roles.guard';
 import { Types } from 'mongoose';
 import { CreateQuestionsDto } from './dtos/lookupQuestions.dto';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
+@ApiBearerAuth()
 @Controller('questions')
 export class QuestionsController {
   constructor(private questionsService: QuestionsService) {}
 
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.Admin)
-  @Get('getAll')
+  @Get('')
   getAllQuestions(@Request() req) {
     const userId = req.user.userId;
     return this.questionsService.getAllQuestions(userId);
@@ -23,7 +25,7 @@ export class QuestionsController {
 
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.Admin, Role.Designer)
-  @Get('get-question/:id')
+  @Get(':id')
   getQuestionById(
     @Request() req,
     @Body() createQuestionDto: CreateQuestionsDto,
@@ -36,7 +38,7 @@ export class QuestionsController {
 
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.Admin, Role.Designer)
-  @Delete('remove-question/:id')
+  @Delete(':id')
   deleteQuestionById(
     @Request() req,
     @Body() deleteQuestionDto: DeleteQuestionsDto,

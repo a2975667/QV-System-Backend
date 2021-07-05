@@ -5,7 +5,8 @@ import { MethodNotAllowedException } from '@nestjs/common';
 import { CreateQuestionResponseDto } from './dto/createQuestionResponse.dto';
 import { UpdateQuestionResponseDto } from './dto/updateQuestionResponse.dto';
 import { UserResponseService } from './user-response.service';
-
+import { ApiBearerAuth } from '@nestjs/swagger';
+@ApiBearerAuth()
 @Controller('user')
 export class UserResponseController {
   constructor(private userResponseService: UserResponseService) {}
