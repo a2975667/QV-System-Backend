@@ -8,6 +8,8 @@ import { QvService } from './qv/qv.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { QVQuestion } from 'src/schemas/questions/qv/qv-question.schema';
 import { QVQuestionSchema } from 'src/schemas/questions/qv/qv-question.schema';
+import { TextInputQuestion } from 'src/schemas/questions/text_input/text_input-question.schema';
+import { TextInputQuestionSchema } from 'src/schemas/questions/text_input/text_input-question.schema';
 import { UsersModule } from 'src/users/users.module';
 import { UsersService } from 'src/users/users.service';
 import { User, UserSchema } from 'src/schemas/user.schema';
@@ -18,6 +20,7 @@ import { Survey, SurveySchema } from 'src/schemas/survey.schema';
     MongooseModule.forFeature([
       { name: Question.name, schema: QuestionSchema },
       { name: QVQuestion.name, schema: QVQuestionSchema },
+      { name: TextInputQuestion.name, schema: TextInputQuestionSchema },
       { name: User.name, schema: UserSchema },
       { name: Survey.name, schema: SurveySchema },
     ]),

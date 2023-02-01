@@ -81,8 +81,8 @@ export class UserResponseService {
     );
 
     // start series of validation check
-    this._validateSurveyAvaliable(SurveyMetadata);
-    this._validateSKeySetting(SurveyMetadata, createQuestionResponseDto);
+    this.validateSurveyAvaliable(SurveyMetadata);
+    this.validateSKeySetting(SurveyMetadata, createQuestionResponseDto);
     await this._validateUKeyUnique(SurveyMetadata, createQuestionResponseDto);
     // end check
 
@@ -111,7 +111,7 @@ export class UserResponseService {
     };
   }
 
-  async CreateQuestionAndUpdateSurveyResponse(
+  async createQuestionAndUpdateSurveyResponse(
     createQuestionResponseDto: CreateQuestionResponseDto,
   ) {
     const SurveyMetadata = await this.coreService.getSurveyById(
@@ -122,13 +122,13 @@ export class UserResponseService {
     );
 
     // start series of validation check
-    this._validateSurveyAvaliable(SurveyMetadata);
-    this._validateSKeySetting(SurveyMetadata, createQuestionResponseDto);
-    this._validateUUIDCorrect(
+    this.validateSurveyAvaliable(SurveyMetadata);
+    this.validateSKeySetting(SurveyMetadata, createQuestionResponseDto);
+    this.validateUUIDCorrect(
       validateSurveyResponse.uuid,
       createQuestionResponseDto,
     );
-    this._validateUKeyCorrect(
+    this.validateUKeyCorrect(
       SurveyMetadata,
       validateSurveyResponse.uKey,
       createQuestionResponseDto,
@@ -166,14 +166,14 @@ export class UserResponseService {
     );
 
     //validations
-    this._validateSurveyAvaliable(SurveyMetadata);
-    this._validateSKeySetting(SurveyMetadata, updateQuestionResponseDto);
-    this._validateUKeyCorrect(
+    this.validateSurveyAvaliable(SurveyMetadata);
+    this.validateSKeySetting(SurveyMetadata, updateQuestionResponseDto);
+    this.validateUKeyCorrect(
       SurveyMetadata,
       validateSurveyResponse.uKey,
       updateQuestionResponseDto,
     );
-    this._validateUUIDCorrect(
+    this.validateUUIDCorrect(
       validateSurveyResponse.uuid,
       updateQuestionResponseDto,
     );
@@ -201,14 +201,14 @@ export class UserResponseService {
     );
 
     //validations
-    this._validateSurveyAvaliable(SurveyMetadata);
-    this._validateSKeySetting(SurveyMetadata, removeQuestionResponseDto);
-    this._validateUKeyCorrect(
+    this.validateSurveyAvaliable(SurveyMetadata);
+    this.validateSKeySetting(SurveyMetadata, removeQuestionResponseDto);
+    this.validateUKeyCorrect(
       SurveyMetadata,
       validateSurveyResponse.uKey,
       removeQuestionResponseDto,
     );
-    this._validateUUIDCorrect(
+    this.validateUUIDCorrect(
       validateSurveyResponse.uuid,
       removeQuestionResponseDto,
     );
@@ -241,14 +241,14 @@ export class UserResponseService {
     );
 
     //validations
-    this._validateSurveyAvaliable(SurveyMetadata);
-    this._validateSKeySetting(SurveyMetadata, completeSurveyResponseDto);
-    this._validateUKeyCorrect(
+    this.validateSurveyAvaliable(SurveyMetadata);
+    this.validateSKeySetting(SurveyMetadata, completeSurveyResponseDto);
+    this.validateUKeyCorrect(
       SurveyMetadata,
       validateSurveyResponse.uKey,
       completeSurveyResponseDto,
     );
-    this._validateUUIDCorrect(
+    this.validateUUIDCorrect(
       validateSurveyResponse.uuid,
       completeSurveyResponseDto,
     );
@@ -331,12 +331,12 @@ export class UserResponseService {
     }
   }
 
-  _validateSurveyAvaliable(SurveyMetadata: SurveyDocument) {
+  private validateSurveyAvaliable(SurveyMetadata: SurveyDocument) {
     if (!SurveyMetadata.settings.isAvaliable)
       throw new BadRequestException('This survey is not avaliable. [URS0145]');
   }
 
-  _validateSKeySetting(
+  private validateSKeySetting(
     SurveyMetadata: SurveyDocument,
     createQuestionResponseDto:
       | CreateQuestionResponseDto
@@ -353,7 +353,7 @@ export class UserResponseService {
       );
   }
 
-  _validateUUIDCorrect(
+  private validateUUIDCorrect(
     surveyResponseUUID: string,
     createQuestionResponseDto:
       | CreateQuestionResponseDto
@@ -367,7 +367,7 @@ export class UserResponseService {
       );
   }
 
-  _validateUKeyCorrect(
+  private validateUKeyCorrect(
     surveyMetadata: SurveyDocument,
     surveyResponseUKey: string,
     createQuestionResponseDto:

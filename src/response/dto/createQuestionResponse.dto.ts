@@ -8,6 +8,7 @@ import {
   IsNotEmpty,
   ValidateNested,
   Length,
+  MinLength,
 } from 'class-validator';
 import { Types } from 'mongoose';
 import { ResponseTypeLikert } from './likert-response.dto';
@@ -25,7 +26,7 @@ export class CreateQuestionResponseDto {
   @ValidateIf((o) => o.uuid === undefined)
   @IsNotEmpty()
   @Equals(true)
-  IsNewSurveyResponse: boolean;
+  isNewSurveyResponse: boolean;
 
   @IsMongoId()
   @IsNotEmpty()
@@ -44,7 +45,7 @@ export class CreateQuestionResponseDto {
   sKey: string;
 
   @IsOptional()
-  @Length(1)
+  @MinLength(1)
   @IsString()
   uKey: string;
 }

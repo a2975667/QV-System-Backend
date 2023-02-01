@@ -32,7 +32,7 @@ export class UserResponseController {
         createQuestionResponseDto,
       );
     } else {
-      return this.userResponseService.CreateQuestionAndUpdateSurveyResponse(
+      return this.userResponseService.createQuestionAndUpdateSurveyResponse(
         createQuestionResponseDto,
       );
     }
