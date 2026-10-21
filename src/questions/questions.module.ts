@@ -18,7 +18,6 @@ import { UsersService } from 'src/users/users.service';
 import { User, UserSchema } from 'src/schemas/user.schema';
 import { Survey, SurveySchema } from 'src/schemas/survey.schema';
 import { ConfigModule } from '@nestjs/config';
-import { JwtModule } from '@nestjs/jwt';
 import { AuthModule } from 'src/auth/auth.module';
 
 @Module({
@@ -34,7 +33,6 @@ import { AuthModule } from 'src/auth/auth.module';
     UsersModule,
     SurveysModule,
     ConfigModule,
-    JwtModule,
     AuthModule,
   ],
   controllers: [QuestionsController, QvController, LikertController, TextController],
