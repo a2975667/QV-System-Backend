@@ -10,7 +10,11 @@ export class AuthService {
   ) {}
 
   googleLogin(req) {
-    if (!req.user) {
+    if (
+      !req.user?._id || typeof req.user.email !== 'string' || !req.user.email ||
+      !Array.isArray(req.user.roles) ||
+      !req.user.roles.every(role => typeof role === 'string')
+    ) {
       return {
         status: -1,
         message: 'Login Error. Please reach out to the developers.',

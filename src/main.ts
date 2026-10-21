@@ -5,6 +5,7 @@ import { AppModule } from './app.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import * as express from 'express';
+import { corsOptions, safeRequestPath } from './http-config';
 
 declare const module: any; // hot module. To remove for production
 
@@ -12,11 +13,7 @@ async function bootstrap() {
   // Create the NestJS application
   const app = await NestFactory.create(AppModule);
   // Enable CORS with more detailed configuration
-  app.enableCors({
-    origin: true, // Allow all origins
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    credentials: true,
-  });
+  app.enableCors(corsOptions);
   app.useGlobalPipes(new ValidationPipe());
   
   // Get the underlying Express app BEFORE applying any NestJS middleware
@@ -24,7 +21,7 @@ async function bootstrap() {
   
   // Add a request logging middleware
   expressApp.use((req, res, next) => {
-    console.log(`[DEBUG] Incoming request: ${req.method} ${req.url}`);
+    console.log(`[DEBUG] Incoming request: ${req.method} ${safeRequestPath(req.url)}`);
     next();
   });
 
@@ -33,13 +30,13 @@ async function bootstrap() {
   expressApp.use((req, res, next) => {
     // If the URL starts with /api, let NestJS handle it
     if (req.url.startsWith('/api')) {
-      console.log(`[DEBUG] API request detected: ${req.method} ${req.url}`);
+      console.log(`[DEBUG] API request detected: ${req.method} ${safeRequestPath(req.url)}`);
       return next();
     }
     
     // If the URL is a direct call to /surveys/:id (non-prefixed API route)
     if (req.url.match(/^\/surveys\/[^\/]+$/) && req.method === 'GET') {
-      console.log(`[DEBUG] Direct survey API call detected: ${req.method} ${req.url}`);
+      console.log(`[DEBUG] Direct survey API call detected: ${req.method} ${safeRequestPath(req.url)}`);
       return next();
     }
     
@@ -49,7 +46,7 @@ async function bootstrap() {
     }
     
     // For all other URLs (React Router routes), serve index.html
-    console.log(`[DEBUG] Serving SPA for: ${req.method} ${req.url}`);
+    console.log(`[DEBUG] Serving SPA for: ${req.method} ${safeRequestPath(req.url)}`);
     return res.sendFile(join(__dirname, '..', 'build', 'index.html'));
   });
   

@@ -1,8 +1,9 @@
 import { AuthService } from './auth.service';
-import { Controller, Get, Req, Res, UseGuards } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
+import { Controller, Get, Header, Req, Res, UseGuards } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { ApiTags } from '@nestjs/swagger';
+import { GoogleAuthGuard } from './google-auth.guard';
+import { JwtAuthGuard } from './jwt-auth.guard';
 
 @Controller('api/v1')
 export class AuthController {
@@ -13,17 +14,25 @@ export class AuthController {
 
   @Get('google-login')
   @ApiTags('User Profiles')
-  @UseGuards(AuthGuard('google'))
+  @UseGuards(GoogleAuthGuard)
   async googleAuth(@Req() req) {
     return req.user;
   }
 
   @Get('redirect')
   @ApiTags('Internal Calls')
-  @UseGuards(AuthGuard('google'))
+  @UseGuards(GoogleAuthGuard)
   googleAuthRedirect(@Req() req, @Res() res) {
-    // Get login data
-    const loginData = this.authService.googleLogin(req);
+    const frontendUrl = this.configService.get('FRONTEND_URL') || 'http://localhost:3000';
+    let loginData;
+    try {
+      loginData = this.authService.googleLogin(req);
+    } catch {
+      return res.redirect(`${frontendUrl}/login?error=oauth`);
+    }
+    if (!loginData.access_token || !loginData.user) {
+      return res.redirect(`${frontendUrl}/login?error=oauth`);
+    }
     
     // Add login data as query parameters directly in the redirect URL
     // This avoids cookie encoding/decoding issues
@@ -39,7 +48,22 @@ export class AuthController {
     console.log('Google Auth redirect completed, redirecting to frontend');
     
     // Redirect with query parameters
-    const frontendUrl = this.configService.get('FRONTEND_URL') || 'http://localhost:3000';
-    res.redirect(`${frontendUrl}/login-success?${params.toString()}`);
+    res.setHeader('Cache-Control', 'no-store');
+    return res.redirect(`${frontendUrl}/login-success?${params.toString()}`);
+  }
+
+  @Get('auth/session')
+  @UseGuards(JwtAuthGuard)
+  @Header('Cache-Control', 'no-store')
+  session(@Req() req) {
+    // Only verified claims, never a full user document (which has other fields).
+    return {
+      user: {
+        id: req.user.userId,
+        email: req.user.username,
+        roles: req.user.roles,
+      },
+      expiresAt: req.user.expiresAt, // Unix seconds, like JWT exp.
+    };
   }
 }

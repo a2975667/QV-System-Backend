@@ -47,7 +47,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
   handleRequest(err, user, info, context: ExecutionContext) {
     // Handle authentication errors
     if (err || !user) {
-      this.logger.warn(`JWT authentication failed: ${err?.message || 'No user found'}`);
+      this.logger.warn('JWT authentication failed');
       throw err || new UnauthorizedException('Authentication required');
     }
     
@@ -112,11 +112,11 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
         response.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
         response.setHeader('Pragma', 'no-cache');
         
-        this.logger.debug(`Token refreshed for user: ${payload.user_email}`);
+        this.logger.debug('Token refreshed');
       }
     } catch (error) {
       // Log errors but don't fail the request - the main authentication still worked
-      this.logger.error(`Error refreshing token: ${error.message}`, error.stack);
+      this.logger.error('Unable to refresh access token');
     }
   }
 }

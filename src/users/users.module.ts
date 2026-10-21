@@ -5,7 +5,6 @@ import { User, UserSchema } from 'src/schemas/user.schema';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 import { ConfigModule } from '@nestjs/config';
-import { JwtModule } from '@nestjs/jwt';
 import { AuthModule } from 'src/auth/auth.module';
 
 @Module({
@@ -14,7 +13,6 @@ import { AuthModule } from 'src/auth/auth.module';
       { name: User.name, schema: UserSchema }
     ]),
     ConfigModule,
-    JwtModule,
     forwardRef(() => AuthModule),
   ],
   controllers: [UsersController, ProtectedUsersController],
